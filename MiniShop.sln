@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory", "Inventory\Inventory.csproj", "{D707D746-69D9-4E35-97D7-7B79AEF3F9B6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC482C7C-CD29-415C-A173-B951E01B3D7D}"
 	ProjectSection(SolutionItems) = preProject
-		compose.yaml = compose.yaml
 		.gitignore = .gitignore
+		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order", "Order\Order.csproj", "{5793B1D1-E747-4CB7-8EBA-49ACDB5CE90B}"
@@ -17,6 +20,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "Notification\Notification.csproj", "{E3AB7F00-E007-4FDF-A75D-3018177BD3F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniShop.AppHost", "MiniShop.AppHost\MiniShop.AppHost.csproj", "{F341DB95-B86A-4562-9B03-06D23E79C25D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniShop.ServiceDefaults", "MiniShop.ServiceDefaults\MiniShop.ServiceDefaults.csproj", "{3285443C-6255-47D6-B2A1-C5C05E43CBB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,5 +55,16 @@ Global
 		{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F341DB95-B86A-4562-9B03-06D23E79C25D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F341DB95-B86A-4562-9B03-06D23E79C25D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F341DB95-B86A-4562-9B03-06D23E79C25D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F341DB95-B86A-4562-9B03-06D23E79C25D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3285443C-6255-47D6-B2A1-C5C05E43CBB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3285443C-6255-47D6-B2A1-C5C05E43CBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3285443C-6255-47D6-B2A1-C5C05E43CBB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3285443C-6255-47D6-B2A1-C5C05E43CBB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

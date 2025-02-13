@@ -11,11 +11,13 @@ public class SmtpEmailService : IEmailService
 {
     private readonly SmtpSettings _settings;
     private readonly ILogger<SmtpEmailService> _logger;
+    private readonly IConfiguration _configuration;
 
-    public SmtpEmailService(IOptions<SmtpSettings> settings, ILogger<SmtpEmailService> logger)
+    public SmtpEmailService(IOptions<SmtpSettings> settings, ILogger<SmtpEmailService> logger, IConfiguration configuration)
     {
         _settings = settings.Value;
         _logger = logger;
+        _configuration = configuration;
     }
 
     public async Task SendEmailAsync(string to, string subject, string body)
@@ -26,8 +28,10 @@ public class SmtpEmailService : IEmailService
         email.Subject = subject;
         email.Body = new TextPart(TextFormat.Html) { Text = body };
 
+        var smtpUri = new Uri(_configuration["Services:maildev:smtp:0"]);
+
         using var client = new SmtpClient();
-        await client.ConnectAsync(_settings.Host, _settings.Port, _settings.UseSsl);
+        await client.ConnectAsync(smtpUri.Host, _settings.Port, _settings.UseSsl);
         
         if (!string.IsNullOrEmpty(_settings.Username))
         {

@@ -7,13 +7,15 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 var assembly = Assembly.GetExecutingAssembly();
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<CatalogContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("CatalogDb")));
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
@@ -33,6 +35,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.MapEndpoints();
 
 if (app.Environment.IsDevelopment())
@@ -42,11 +46,10 @@ if (app.Environment.IsDevelopment())
 
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
-    
+
     await context.Database.MigrateAsync();
 }
 
 app.UseCors("AllowAll");
-app.UseHttpsRedirection();
 
 app.Run();
