@@ -101,6 +101,8 @@
     build:
       context: ./Frontend
       dockerfile: Dockerfile
+    environment:
+      - services__apigateway__http__0=http://localhost:5001
     ports:
       - "3000:3000"
     depends_on:

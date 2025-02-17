@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_URL = 'http://localhost:5001';
+export const API_URL = import.meta.env.services__apigateway__http__0;
 
 export const apiClient = axios.create({
     baseURL: API_URL,
