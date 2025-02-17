@@ -12,4 +12,4 @@ RUN npm run build
 
 EXPOSE 3000
 
-ENTRYPOINT [ "serve", "-s", "dist" ]
+ENTRYPOINT sh -c "./dist/vite-envs.sh && serve -s dist"
