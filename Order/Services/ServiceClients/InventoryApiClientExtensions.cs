@@ -2,7 +2,6 @@
 
 namespace Order.Services.ServiceClients;
 
-// TODO: Fixup that
 public static class InventoryApiClientExtensions
 {
     public static IServiceCollection AddInventoryApiClient(
@@ -11,7 +10,7 @@ public static class InventoryApiClientExtensions
     {
         services.AddHttpClient<IInventoryApiClient, InventoryApiClient>(client =>
         {
-            client.BaseAddress = new Uri(configuration["InventoryApi:BaseUrl"]!);
+            client.BaseAddress = new("https+http://inventory/");
             client.Timeout = TimeSpan.FromSeconds(30);
         });
 

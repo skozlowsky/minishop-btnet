@@ -18,6 +18,7 @@ public class GetProductsByCategoryEndpoint : IEndpoint
             })
             .WithName("GetProductsByCategory")
             .WithTags("Products")
-            .Produces<PagedResult<ProductDto>>();
+            .Produces<PagedResult<ProductDto>>()
+            .CacheOutput();
     }
 }

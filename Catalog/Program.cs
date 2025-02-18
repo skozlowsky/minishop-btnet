@@ -15,23 +15,21 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<CatalogContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("CatalogDb")));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("catalogDb")));
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddEndpoints(assembly);
+builder.Services.AddCors();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+// TODO check base policy
+// builder.Services.AddOutputCache(options =>
+// {
+//     options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromSeconds(2)));
+// });
+
+builder.AddRedisOutputCache("redis");
 
 var app = builder.Build();
 
@@ -50,6 +48,11 @@ if (app.Environment.IsDevelopment())
     await context.Database.MigrateAsync();
 }
 
-app.UseCors("AllowAll");
+app.UseCors(c => c
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.UseOutputCache();
 
 app.Run();

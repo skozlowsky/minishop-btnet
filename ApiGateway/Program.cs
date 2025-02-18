@@ -6,23 +6,16 @@ builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
     .AddServiceDiscoveryDestinationResolver();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .WithOrigins("*")
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+builder.Services.AddCors();
 
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
 
-app.UseCors("AllowAll");
+app.UseCors(c => c
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 #if !DEBUG
 app.UseHttpsRedirection(); // causes issues with CORS if the frontend doesn't use HTTPS

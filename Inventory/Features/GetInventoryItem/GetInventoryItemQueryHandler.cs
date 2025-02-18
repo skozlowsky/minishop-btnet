@@ -1,5 +1,4 @@
 ﻿using Inventory.Database;
-using Inventory.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

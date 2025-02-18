@@ -19,7 +19,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<OrderContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("OrderDb")));
+    o.UseNpgsql(builder.Configuration.GetConnectionString("orderDb")));
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
@@ -37,11 +37,7 @@ builder.Services.AddMassTransit(x =>
             
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(new Uri(builder.Configuration["Services:rabbitmq:amqp:0"]), "/", h =>
-        {
-            h.Username(builder.Configuration["RabbitMQ:Username"]);
-            h.Password(builder.Configuration["RabbitMQ:Password"]);
-        });
+        cfg.Host(builder.Configuration.GetConnectionString("rabbitMQ"));
                 
         cfg.ConfigureEndpoints(context);
     });
@@ -49,16 +45,7 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddEndpoints(assembly);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -77,6 +64,9 @@ if (app.Environment.IsDevelopment())
     await context.Database.MigrateAsync();
 }
 
-app.UseCors("AllowAll");
+app.UseCors(c => c
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.Run();
