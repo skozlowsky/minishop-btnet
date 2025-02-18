@@ -1,4 +1,5 @@
 using Catalog.Abstractions;
+using Catalog.Metrics;
 using MediatR;
 
 namespace Catalog.Features.GetProduct;
@@ -9,9 +10,11 @@ public class GetProductEndpoint : IEndpoint
     {
         app.MapGet("/api/products/{id}", async (
                 Guid id,
-                IMediator mediator) =>
+                IMediator mediator,
+                ProductMetrics metrics) =>
             {
                 var result = await mediator.Send(new GetProductQuery(id));
+                metrics.ProductDisplayed($"{id:D}");
                 return result.IsSuccess ? Results.Ok(result.Value) : Results.NotFound();
             })
             .WithName("GetProduct")

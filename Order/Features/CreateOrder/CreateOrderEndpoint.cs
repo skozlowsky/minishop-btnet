@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Order.Abstractions;
+using Order.Metrics;
 
 namespace Order.Features.CreateOrder;
 
@@ -9,9 +10,21 @@ public class CreateOrderEndpoint : IEndpoint
     {
         app.MapPost("/api/orders", async (
                 CreateOrderCommand command,
-                IMediator mediator) =>
+                IMediator mediator,
+                OrderMetrics metrics) =>
             {
                 var result = await mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    var items = command
+                        .Items
+                        .Select(orderItem => 
+                            (productId: $"{orderItem.ProductId:D}", quantity: orderItem.Quantity))
+                        .ToArray();
+                    metrics.ProductsSold(items);
+                }
+
                 return result.IsSuccess 
                     ? Results.Ok(new { OrderId = result.Value }) 
                     : Results.BadRequest(result.Error);
