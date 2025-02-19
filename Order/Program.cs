@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Order.Abstractions;
 using Order.Database;
 using Order.Extensions;
+using Order.Metrics;
 using Order.Services;
 using Order.Services.ServiceClients;
 using Scalar.AspNetCore;
@@ -18,11 +19,15 @@ var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(m => m.AddMeter("Order.Metrics"));
+
 builder.AddNpgsqlDbContext<OrderContext>("orderDb");
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
 
+builder.Services.AddSingleton<OrderMetrics>();
 builder.Services.AddInventoryApiClient(builder.Configuration);
 
 builder.Services.AddScoped<IEventPublisher, EventPublisher>();

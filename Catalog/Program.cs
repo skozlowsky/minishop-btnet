@@ -1,6 +1,7 @@
 using System.Reflection;
 using Catalog.Database;
 using Catalog.Extensions;
+using Catalog.Metrics;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -14,10 +15,16 @@ var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
+
+builder.Services.AddOpenTelemetry()
+    .WithMetrics(m => m.AddMeter("Catalog.Metrics"));
+
 builder.AddNpgsqlDbContext<CatalogContext>("catalogDb");
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddSingleton<ProductMetrics>();
 
 builder.Services.AddEndpoints(assembly);
 builder.Services.AddProblemDetails();
