@@ -27,25 +27,5 @@
     <ProjectReference Include="..\Notification\Notification.csproj" />
     <ProjectReference Include="..\Order\Order.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="aspirate-output\apigateway\" />
-    <Folder Include="aspirate-output\inventory\" />
-    <Folder Include="aspirate-output\notification\" />
-    <Folder Include="aspirate-output\order\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="aspirate-output\maildev\service.yaml" />
-    <None Remove="aspirate-output\maildev\kustomization.yaml" />
-    <None Remove="aspirate-output\inventory\kustomization.yaml" />
-    <None Remove="aspirate-output\dashboard.yaml" />
-    <None Remove="aspirate-output\catalog\service.yaml" />
-    <None Remove="aspirate-output\apigateway\kustomization.yaml" />
-  </ItemGroup>
-  
-  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-    <DefineConstants>OS_MAC</DefineConstants>
-  </PropertyGroup>
   
 </Project>
