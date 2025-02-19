@@ -6,9 +6,10 @@ var passwordDb = builder.AddParameter("password", "postgres", secret: true);
 
 // infrastructure
 
-var postgres = builder.AddPostgres("postgres", usernameDb, passwordDb)
+var postgres = builder
+    .AddPostgres("postgres", usernameDb, passwordDb)
     .WithContainerName("minishop.database.aspire")
-    .WithDataVolume("minishop-db")
+    //.WithDataVolume("minishop-db")
     .WithPgWeb(pgWeb => pgWeb
         .WithHostPort(15432)
         .WithContainerName("minishop.database.webconsole.aspire")
@@ -72,11 +73,8 @@ var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway")
 builder.AddDockerfile("minishopweb", "../Frontend")
     .WithContainerName("minishop.web.aspire")
     .WithHttpEndpoint(3000, 3000)
-#if OS_MAC
-    .WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
-#else
-    .WithReference(apiGateway)
-#endif
+    //.WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
+    //.WithReference(apiGateway)
     .WaitFor(apiGateway)
     .WithExternalHttpEndpoints()
     .WithLifetime(ContainerLifetime.Persistent);

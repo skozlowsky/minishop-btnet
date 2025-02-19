@@ -14,13 +14,13 @@ var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddDbContext<CatalogContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("catalogDb")));
+builder.AddNpgsqlDbContext<CatalogContext>("catalogDb");
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddEndpoints(assembly);
+builder.Services.AddProblemDetails();
 builder.Services.AddCors();
 
 // TODO check base policy
@@ -37,16 +37,7 @@ app.MapDefaultEndpoints();
 
 app.MapEndpoints();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-
-    using var scope = app.Services.CreateScope();
-    var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
-
-    await context.Database.MigrateAsync();
-}
+await MigrateUp();
 
 app.UseCors(c => c
     .AllowAnyOrigin()
@@ -56,3 +47,15 @@ app.UseCors(c => c
 app.UseOutputCache();
 
 app.Run();
+
+
+async Task MigrateUp()
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+
+    using var scope = app.Services.CreateScope();
+    var context = scope.ServiceProvider.GetRequiredService<CatalogContext>();
+
+    await context.Database.MigrateAsync();
+}

@@ -6,6 +6,8 @@ builder.Services.AddReverseProxy()
     .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"))
     .AddServiceDiscoveryDestinationResolver();
 
+builder.Services.AddHttpForwarderWithServiceDiscovery();
+
 builder.Services.AddCors();
 
 var app = builder.Build();
@@ -17,10 +19,8 @@ app.UseCors(c => c
     .AllowAnyMethod()
     .AllowAnyHeader());
 
-#if !DEBUG
-app.UseHttpsRedirection(); // causes issues with CORS if the frontend doesn't use HTTPS
-#endif
 
+app.UseRouting();
 app.MapReverseProxy();
 
 app.Run();
