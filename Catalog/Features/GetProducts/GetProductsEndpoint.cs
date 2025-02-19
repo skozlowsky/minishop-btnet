@@ -16,6 +16,7 @@ public class GetProductsEndpoint : IEndpoint
             })
             .WithName("GetProducts")
             .WithTags("Products")
-            .Produces<PagedResult<ProductDto>>();
+            .Produces<PagedResult<ProductDto>>()
+            .CacheOutput();
     }
 }

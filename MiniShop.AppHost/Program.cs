@@ -1,22 +1,24 @@
-using System.ComponentModel;
-using Aspire.Hosting;
-
 var builder = DistributedApplication.CreateBuilder(args);
+
+// parameters
+var usernameDb = builder.AddParameter("username", "postgres", secret: true);
+var passwordDb = builder.AddParameter("password", "postgres", secret: true);
 
 // infrastructure
 
-var postgres = builder.AddPostgres("postgres")
+var postgres = builder
+    .AddPostgres("postgres", usernameDb, passwordDb)
     .WithContainerName("minishop.database.aspire")
-    .WithDataVolume("minishop-db")
+    //.WithDataVolume("minishop-db")
     .WithPgWeb(pgWeb => pgWeb
         .WithHostPort(15432)
         .WithContainerName("minishop.database.webconsole.aspire")
         .WithLifetime(ContainerLifetime.Persistent))
     .WithLifetime(ContainerLifetime.Persistent);
 
-var inventoryDb = postgres.AddDatabase("InventoryDb", "inventory");
-var catalogDb = postgres.AddDatabase("CatalogDb", "catalog");
-var orderDb = postgres.AddDatabase("OrderDb", "order");
+var inventoryDb = postgres.AddDatabase("inventoryDb", "inventory");
+var catalogDb = postgres.AddDatabase("catalogDb", "catalog");
+var orderDb = postgres.AddDatabase("orderDb", "order");
 
 var maildev = builder.AddContainer("maildev", "maildev/maildev")
     .WithContainerName("maildev.aspire")
@@ -24,42 +26,55 @@ var maildev = builder.AddContainer("maildev", "maildev/maildev")
     .WithHttpEndpoint(1080, 1080)
     .WithLifetime(ContainerLifetime.Persistent);
 
-var rabbitmq = builder.AddContainer("rabbitmq", "rabbitmq", "3-management")
+var rabbitmq = builder.AddRabbitMQ("rabbitmq")
     .WithContainerName("rabbitmq.aspire")
-    .WithEndpoint(5672, 5672, scheme: "amqp")
-    .WithHttpEndpoint(15672, 15672)
-    //.WithEnvironment("RABBITMQ_DEFAULT_USER", "guest")
-    //.WithEnvironment("RABBITMQ_DEFAULT_PASS", "guest") 
+    .WithManagementPlugin()
+    .WithLifetime(ContainerLifetime.Persistent);
+
+var redis = builder.AddRedis("redis")
+    .WithContainerName("redis.aspire")
     .WithLifetime(ContainerLifetime.Persistent);
 
 // apis
 
 var catalog = builder.AddProject<Projects.Catalog>("catalog")
-    .WithReference(catalogDb);
+    .WithReference(catalogDb)
+    .WithReference(redis)
+    .WaitFor(catalogDb)
+    .WaitFor(redis);
 
 var inventory = builder.AddProject<Projects.Inventory>("inventory")
-    .WithReference(inventoryDb);
+    .WithReference(inventoryDb)
+    .WaitFor(inventoryDb);
 
 var notification = builder.AddProject<Projects.Notification>("notification")
     .WithReference(maildev.GetEndpoint("smtp"))
-    .WithReference(rabbitmq.GetEndpoint("amqp"));
+    .WithReference(rabbitmq)
+    .WaitFor(maildev)
+    .WaitFor(rabbitmq);
 
 var order = builder.AddProject<Projects.Order>("order")
     .WithReference(inventory)
     .WithReference(orderDb)
-    .WithReference(rabbitmq.GetEndpoint("amqp"));
+    .WithReference(rabbitmq)
+    .WaitFor(inventory)
+    .WaitFor(orderDb)
+    .WaitFor(rabbitmq);
 
 var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway")
     .WithReference(catalog)
     .WithReference(order)
-    .WithExternalHttpEndpoints();
+    .WithExternalHttpEndpoints()
+    .WaitFor(catalog)
+    .WaitFor(order);
 
 // frontend
 
 builder.AddDockerfile("minishopweb", "../Frontend")
     .WithContainerName("minishop.web.aspire")
     .WithHttpEndpoint(3000, 3000)
-    .WithReference(apiGateway)
+    //.WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
+    //.WithReference(apiGateway)
     .WaitFor(apiGateway)
     .WithExternalHttpEndpoints()
     .WithLifetime(ContainerLifetime.Persistent);

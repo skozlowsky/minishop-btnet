@@ -15,11 +15,11 @@ var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
+
 builder.Services.AddOpenTelemetry()
     .WithMetrics(m => m.AddMeter("Catalog.Metrics"));
 
-builder.Services.AddDbContext<CatalogContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("CatalogDb")));
+builder.AddNpgsqlDbContext<CatalogContext>("catalogDb");
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
@@ -27,17 +27,16 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddSingleton<ProductMetrics>();
 
 builder.Services.AddEndpoints(assembly);
+builder.Services.AddProblemDetails();
+builder.Services.AddCors();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+// TODO check base policy
+// builder.Services.AddOutputCache(options =>
+// {
+//     options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromSeconds(2)));
+// });
+
+builder.AddRedisOutputCache("redis");
 
 var app = builder.Build();
 
@@ -45,7 +44,19 @@ app.MapDefaultEndpoints();
 
 app.MapEndpoints();
 
-if (app.Environment.IsDevelopment())
+await MigrateUp();
+
+app.UseCors(c => c
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.UseOutputCache();
+
+app.Run();
+
+
+async Task MigrateUp()
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
@@ -55,7 +66,3 @@ if (app.Environment.IsDevelopment())
 
     await context.Database.MigrateAsync();
 }
-
-app.UseCors("AllowAll");
-
-app.Run();

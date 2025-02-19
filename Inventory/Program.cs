@@ -14,24 +14,14 @@ var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddDbContext<InventoryContext>(o =>
-    o.UseNpgsql(builder.Configuration.GetConnectionString("InventoryDb")));
+builder.AddNpgsqlDbContext<InventoryContext>("inventoryDb");
 
 builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(assembly));
 builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddEndpoints(assembly);
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
-});
+builder.Services.AddProblemDetails();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -39,7 +29,16 @@ app.MapDefaultEndpoints();
 
 app.MapEndpoints();
 
-if (app.Environment.IsDevelopment())
+await MigrateUp();
+
+app.UseCors(c => c
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+app.Run();
+
+async Task MigrateUp()
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
@@ -49,7 +48,3 @@ if (app.Environment.IsDevelopment())
 
     await context.Database.MigrateAsync();
 }
-
-app.UseCors("AllowAll");
-
-app.Run();

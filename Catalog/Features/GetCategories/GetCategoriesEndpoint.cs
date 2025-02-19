@@ -15,6 +15,7 @@ public class GetCategoriesEndpoint : IEndpoint
             })
             .WithName("GetCategories")
             .WithTags("Categories")
-            .Produces<List<CategoryDto>>();
+            .Produces<List<CategoryDto>>()
+            .CacheOutput();
     }
 }

@@ -1,6 +1,4 @@
-﻿using Order.Services;
-
-namespace Order.Middleware;
+﻿namespace Order.Middleware;
 
 public static class Extensions
 {
