@@ -16,6 +16,6 @@ public class ProductMetrics
     {
         _productDisplayedCounter.Add(
             1,
-            KeyValuePair.Create<string, object?>("minishop.product.name", productId));
+            KeyValuePair.Create<string, object?>("minishop.product.id", productId));
     }
 }
