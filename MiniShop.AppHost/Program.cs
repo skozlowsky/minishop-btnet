@@ -1,15 +1,15 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
 // parameters
-var usernameDb = builder.AddParameter("username", "postgres", secret: true);
-var passwordDb = builder.AddParameter("password", "postgres", secret: true);
+//var usernameDb = builder.AddParameter("username", "postgres", secret: true);
+//var passwordDb = builder.AddParameter("password", "postgres", secret: true);
 
 // infrastructure
 
 var postgres = builder
-    .AddPostgres("postgres", usernameDb, passwordDb)
+    .AddPostgres("postgres")
     .WithContainerName("minishop.database.aspire")
-    //.WithDataVolume("minishop-db")
+    .WithDataVolume("minishop-db")
     .WithPgWeb(pgWeb => pgWeb
         .WithHostPort(15432)
         .WithContainerName("minishop.database.webconsole.aspire")
@@ -73,10 +73,10 @@ var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway")
 builder.AddDockerfile("minishopweb", "../Frontend")
     .WithContainerName("minishop.web.aspire")
     .WithHttpEndpoint(3000, 3000)
-    //.WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
-    //.WithReference(apiGateway)
+    .WithReference(apiGateway)
     .WaitFor(apiGateway)
     .WithExternalHttpEndpoints()
+    .WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
     .WithLifetime(ContainerLifetime.Persistent);
 
 builder.Build().Run();
