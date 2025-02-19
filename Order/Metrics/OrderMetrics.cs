@@ -18,7 +18,7 @@ public class OrderMetrics
         {
             _productSoldCounter.Add(
                 product.quantity,
-                KeyValuePair.Create<string, object?>("minishop.product.name", product.productId));
+                KeyValuePair.Create<string, object?>("minishop.product.id", product.productId));
         }
     }
 }
