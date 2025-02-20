@@ -30,12 +30,6 @@ builder.Services.AddEndpoints(assembly);
 builder.Services.AddProblemDetails();
 builder.Services.AddCors();
 
-// TODO check base policy
-// builder.Services.AddOutputCache(options =>
-// {
-//     options.AddBasePolicy(builder => builder.Expire(TimeSpan.FromSeconds(2)));
-// });
-
 builder.AddRedisOutputCache("redis");
 
 var app = builder.Build();
