@@ -2,6 +2,8 @@
 
 
 ## Test data
+
+CatalogDB:
 ```sql
 INSERT INTO "Categories" ("Id", "Name", "Description") VALUES
     ('f47ac10b-58cc-4372-a567-0e02b2c3d479', 'Electronics', 'Electronic devices and accessories'),
@@ -17,7 +19,9 @@ INSERT INTO "Products" ("Id", "Name", "Description", "Price", "IsActive", "Categ
     ('a47ac10b-58cc-4372-a567-0e02b2c3d482', 'Garden Tools Set', 'Complete set of essential garden tools', 129.99, true, 'f47ac10b-58cc-4372-a567-0e02b2c3d481', ARRAY['garden', 'tools', 'outdoor']),
     ('a47ac10b-58cc-4372-a567-0e02b2c3d483', 'Tennis Racket Pro', 'Professional grade tennis racket', 199.99, true, 'f47ac10b-58cc-4372-a567-0e02b2c3d482', ARRAY['sports', 'tennis', 'equipment']),
     ('a47ac10b-58cc-4372-a567-0e02b2c3d484', 'Tablet Y', 'Compact tablet for entertainment', 299.99, false, 'f47ac10b-58cc-4372-a567-0e02b2c3d479', ARRAY['electronics', 'tablet', 'mobile']);
-
+```
+InventoryDb:
+```sql
 -- Items
 INSERT INTO "Items" ("Id", "Sku", "Name", "AvailableQuantity", "ReservedQuantity", "Price", "CreatedAt", "UpdatedAt") VALUES
     ('a47ac10b-58cc-4372-a567-0e02b2c3d479', 'PHONE-001', 'Smartphone X - 128GB Black', 50, 5, 999.99, '2024-02-18 10:00:00+00', '2024-02-18 10:00:00+00'),
