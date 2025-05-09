@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0"/>
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.2.0" />
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -13,19 +13,22 @@
 
     <ItemGroup>
         <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
-        <PackageReference Include="Aspire.Hosting.Azure.PostgreSQL" Version="9.2.1"/>
+        <PackageReference Include="Aspire.Hosting.Azure.PostgreSQL" Version="9.2.1" />
+        <PackageReference Include="Aspire.Hosting.Docker" Version="9.2.1-preview.1.25222.1" />
+        <PackageReference Include="Aspire.Hosting.Kubernetes" Version="9.2.1-preview.1.25222.1" />
         <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />
         <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.2.1" />
         <PackageReference Include="Aspire.Hosting.Redis" Version="9.2.1" />
+        <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.4.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ApiGateway\ApiGateway.csproj"/>
-        <ProjectReference Include="..\Catalog\Catalog.csproj"/>
-        <ProjectReference Include="..\Inventory\Inventory.csproj"/>
-        <ProjectReference Include="..\Notification\Notification.csproj"/>
-        <ProjectReference Include="..\Order\Order.csproj"/>
+        <ProjectReference Include="..\ApiGateway\ApiGateway.csproj" />
+        <ProjectReference Include="..\Catalog\Catalog.csproj" />
+        <ProjectReference Include="..\Inventory\Inventory.csproj" />
+        <ProjectReference Include="..\Notification\Notification.csproj" />
+        <ProjectReference Include="..\Order\Order.csproj" />
     </ItemGroup>
 
 <!--    <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">-->

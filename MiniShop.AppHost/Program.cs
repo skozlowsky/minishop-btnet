@@ -75,9 +75,15 @@ builder.AddDockerfile("minishopweb", "../Frontend")
     .WithHttpEndpoint(3000, 3000)
     //.WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
     //.WithReference(apiGateway)
+    .WithReference(apiGateway)
     .WaitFor(apiGateway)
     .WithExternalHttpEndpoints()
     .WithLifetime(ContainerLifetime.Persistent);
+
+// builder.AddViteApp("minishopweb", "../Frontend")
+//     .WithReference(apiGateway)
+//     .WaitFor(apiGateway)
+//     .WithExternalHttpEndpoints();
 
 // builder.AddNpmApp("minishopweb", "../Frontend")
 //     .WithReference(apiGateway)
@@ -85,5 +91,8 @@ builder.AddDockerfile("minishopweb", "../Frontend")
 //     .WithEnvironment("BROWSER", "none")
 //     .WithHttpEndpoint(env: "VITE_PORT")
 //     .PublishAsDockerFile();
+
+builder.AddDockerComposePublisher();
+builder.AddKubernetesPublisher();
 
 builder.Build().Run();
