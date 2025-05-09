@@ -8,8 +8,6 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-
 var assembly = Assembly.GetExecutingAssembly();
 
 builder.Services.AddOpenApi();
@@ -30,8 +28,6 @@ builder.Services.AddProblemDetails();
 builder.Services.AddCors();
 
 var app = builder.Build();
-
-app.MapDefaultEndpoints();
 
 app.MapEndpoints();
 

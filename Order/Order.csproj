@@ -31,7 +31,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MiniShop.ServiceDefaults\MiniShop.ServiceDefaults.csproj" />
       <ProjectReference Include="..\Order.IntegrationEvents\Order.IntegrationEvents.csproj" />
     </ItemGroup>
 
