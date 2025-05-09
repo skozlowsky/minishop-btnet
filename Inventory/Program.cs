@@ -29,6 +29,9 @@ app.MapDefaultEndpoints();
 
 app.MapEndpoints();
 
+app.MapOpenApi();
+app.MapScalarApiReference();
+
 await MigrateUp();
 
 app.UseCors(c => c
@@ -40,9 +43,6 @@ app.Run();
 
 async Task MigrateUp()
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<InventoryContext>();
 

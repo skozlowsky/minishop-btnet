@@ -16,9 +16,9 @@ var postgres = builder
         .WithLifetime(ContainerLifetime.Persistent))
     .WithLifetime(ContainerLifetime.Persistent);
 
-var inventoryDb = postgres.AddDatabase("inventoryDb", "inventory");
-var catalogDb = postgres.AddDatabase("catalogDb", "catalog");
-var orderDb = postgres.AddDatabase("orderDb", "order");
+var inventoryDb = postgres.AddDatabase("inventoryDb");
+var catalogDb = postgres.AddDatabase("catalogDb");
+var orderDb = postgres.AddDatabase("orderDb");
 
 var maildev = builder.AddContainer("maildev", "maildev/maildev")
     .WithContainerName("maildev.aspire")
@@ -75,7 +75,6 @@ builder.AddDockerfile("minishopweb", "../Frontend")
     .WithHttpEndpoint(3000, 3000)
     //.WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
     //.WithReference(apiGateway)
-    .WithReference(apiGateway)
     .WaitFor(apiGateway)
     .WithExternalHttpEndpoints()
     .WithLifetime(ContainerLifetime.Persistent);
