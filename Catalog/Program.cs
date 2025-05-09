@@ -30,8 +30,6 @@ builder.Services.AddEndpoints(assembly);
 builder.Services.AddProblemDetails();
 builder.Services.AddCors();
 
-builder.AddRedisOutputCache("redis");
-
 var app = builder.Build();
 
 app.MapDefaultEndpoints();
@@ -47,8 +45,6 @@ app.UseCors(c => c
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
-
-app.UseOutputCache();
 
 app.Run();
 
