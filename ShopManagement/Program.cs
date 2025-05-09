@@ -2,17 +2,13 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServiceDefaults();
-
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddHttpClient("inventoryClient",
-    static client => client.BaseAddress = new("https+http://inventory"));
+    client => client.BaseAddress = new("http://where_should_i_do_request?"));
 
 var app = builder.Build();
-
-app.MapDefaultEndpoints();
 
 app.MapOpenApi();
 app.MapScalarApiReference();
