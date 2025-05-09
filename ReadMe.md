@@ -1,5 +1,50 @@
 # Mini Shop
 
+## Zadanie 3
+Dodaj output cache do endpointu GET **/api/categories** w serwisie Catalog.
+
+- Dodaj integracje hostingową dla Redisa do AppHost
+- Zadeklaruj odpowiedni zasób, a następnie połącz go z projektem Catalog. Użyj do tego **WithReference()**
+- Dodaj odpowiednią konfigurację paczki klienckiej do projektu Catalog (patrz snippety)
+- Skonfiguruj output cache dla endpointu **/api/categories** (patrz snippety)
+
+Sprwadź tracing ;)
+
+### Snippety
+
+Paczki nuget:
+```xml
+<PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="9.0.0" /> <!--integracja kliencka-->
+<PackageReference Include="Aspire.Hosting.Redis" Version="9.0.0"/> <!--integracja hostingowa-->
+```
+
+Konfiguracja endpointa:
+```csharp
+app.MapGet("/cached", () => {}).CacheOutput();
+```
+
+Konfiguracja paczki klienckiej:
+
+```csharp
+builder.AddRedisOutputCache("nazwa_modulu_aspire");
+
+//..
+
+app.UseOutputCache();
+```
+
+<details>
+<summary>Ściąga:</summary>
+
+Hosting:
+```csharp
+var redis = builder.AddRedis("redis")
+    .WithLifetime(ContainerLifetime.Persistent);
+
+cachedApi.WithReference(redis);
+```
+
+</details>
 
 ## Test data
 

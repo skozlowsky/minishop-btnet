@@ -21,7 +21,6 @@ var catalogDb = postgres.AddDatabase("catalogDb");
 var orderDb = postgres.AddDatabase("orderDb");
 
 var maildev = builder.AddContainer("maildev", "maildev/maildev")
-    .WithContainerName("maildev.aspire")
     .WithEndpoint(1025, 1025, name: "smtp")
     .WithHttpEndpoint(1080, 1080)
     .WithLifetime(ContainerLifetime.Persistent);
@@ -71,27 +70,9 @@ var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway")
 // frontend
 
 builder.AddDockerfile("minishopweb", "../Frontend")
-    .WithContainerName("minishop.web.aspire")
     .WithHttpEndpoint(3000, 3000)
-    //.WithEnvironment("services__apigateway__http__0", "http://localhost:5001")
-    //.WithReference(apiGateway)
     .WaitFor(apiGateway)
     .WithExternalHttpEndpoints()
     .WithLifetime(ContainerLifetime.Persistent);
-
-// builder.AddViteApp("minishopweb", "../Frontend")
-//     .WithReference(apiGateway)
-//     .WaitFor(apiGateway)
-//     .WithExternalHttpEndpoints();
-
-// builder.AddNpmApp("minishopweb", "../Frontend")
-//     .WithReference(apiGateway)
-//     .WaitFor(apiGateway)
-//     .WithEnvironment("BROWSER", "none")
-//     .WithHttpEndpoint(env: "VITE_PORT")
-//     .PublishAsDockerFile();
-
-builder.AddDockerComposePublisher();
-builder.AddKubernetesPublisher();
 
 builder.Build().Run();
