@@ -22,6 +22,7 @@
         <ProjectReference Include="..\Catalog\Catalog.csproj" />
         <ProjectReference Include="..\Inventory\Inventory.csproj" />
         <ProjectReference Include="..\Order\Order.csproj" />
+        <ProjectReference Include="..\ShopManagement\ShopManagement.csproj" />
     </ItemGroup>
     
 </Project>

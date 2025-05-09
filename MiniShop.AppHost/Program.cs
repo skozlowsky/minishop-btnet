@@ -34,6 +34,10 @@ var order = builder.AddProject<Projects.Order>("order")
     .WaitFor(orderDb)
     .WaitFor(rabbitmq);
 
+var management = builder.AddProject<Projects.ShopManagement>("management")
+    .WithReference(inventory)
+    .WaitFor(inventory);
+
 var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway")
     .WithReference(catalog)
     .WithReference(order)

@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniShop.IntegrationTests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{0A15BA8B-C151-4318-A346-D6AA4C4C1A77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopManagement", "ShopManagement\ShopManagement.csproj", "{EF2778A1-B59E-4EFA-8A7A-68181551BE44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,10 @@ Global
 		{47884CC5-522D-4341-B3B2-8DE2FB02B9C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47884CC5-522D-4341-B3B2-8DE2FB02B9C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47884CC5-522D-4341-B3B2-8DE2FB02B9C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF2778A1-B59E-4EFA-8A7A-68181551BE44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2778A1-B59E-4EFA-8A7A-68181551BE44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2778A1-B59E-4EFA-8A7A-68181551BE44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2778A1-B59E-4EFA-8A7A-68181551BE44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

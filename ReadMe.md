@@ -1,106 +1,37 @@
 # Mini Shop
 
-## Zadanie 1
+## Zadanie 2
 
-- utwórz projekt AppHost
-- dodaj referencje projektów (ApiGateway, Catalog, Inventory, Order) do AppHost oraz dodaj projekty za pomocą:
-  - ```csharp
-    var service = builder.AddProject<Projects.YourService>("projectResourceName");
-    ```
-- utwórz instancje postgresa używając dodając nuget `<PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />` do apphost, oraz zdefiniuj go używając buildera w projekcie AppHost
-  - ```csharp
-    var postgresResource = builder.AddPostgres("postgresResourceName");
-    ```
-  - do zdefiniowanego postgresa dodaj
-    ```csharp
-    .WithPgWeb(pgWeb => pgWeb
-        .WithHostPort(15432)
-        .WithLifetime(ContainerLifetime.Persistent))
-    ```
-  - możesz też użyć `.WithLifetime(ContainerLifetime.Persistent))` aby kontener sie nie restetowal się miedzy kolejnymi sesjami debuga
-- stwórz trzy bazy `inventoryDb`, `catalogDb`, `orderDb` o dokladnie takich nazwach
-  - ```csharp
-    var dbResource = yourPostgresDatabase.AddDatabase("dbResourceName");
-    ```
-- dodaj instancje Rabbita za pomocą odpowiedniego pakietu
-  - poszukaj odpowiedniej integracji hostingowej **Azure.Hosting.***
-- za pomocą `.WithReference(<nazwa_resourcu_bazy>)` dodaj referencje:
-  - inventoryDb -> inventoryService
-  - catalogDb -> catalogService
-  - orderDb -> orderService
-  - rabbitmq -> orderService
-  - inventoryService -> orderService (order manipuluje stanem magazynu)
-  - catalogService -> apiGateway
-  - orderService -> apiGateway
-- do projektu `apiGateway` dodaj `.WithExternalHttpEndpoints()`
-- ostatecznie dodaj frontend :)
-```csharp
-builder.AddDockerfile("minishopweb", "../Frontend")
-    .WithHttpEndpoint(3000, 3000)
-    .WaitFor(apiGateway)
-    .WithExternalHttpEndpoints()
-    .WithLifetime(ContainerLifetime.Persistent);
-```
+Chcemy dodać kolejny zasób do naszego projektu w .NET Aspire w celu wsparcia naszego wewnętrznego zespołu.
+Dodaj projekt ShopManagement do modelu aplikacji i upewnij się, że uruchamia się razem z naszą rozproszoną aplikacją. Klient HTTP w projekcie ShopManagement powinien używać service discovery do konfiguracji adresu projektu Inventory.
+Działanie aplikacji możesz sprawdzić poprzez odpytanie GET /api/stock
+
+- dodaj projekt `ShopManagement` do AppHost
+- do `ShopManagment` dodaj referencje do `ServiceDefaults`
+- dodaj do `ShopManagment
+  ```csharp
+  builder.AddServiceDefaults();
+  
+  var app = builder.Build();
+  
+  app.MapDefaultEndpoints();
+  ```
+  używając już istniejącej referencji do projektu `ServiceDefaults`
+- `ShopManagement` ma niepoprawnie skonfigurowany HTTP Client, który powinien móc się skomunikować z Invetory
+- Napraw endpoint '/api/stock'
 
 <details>
 <summary>Sciąga:</summary>
 
-Postgres:
 ```csharp
-var postgres = builder
-    .AddPostgres("postgres")
-    .WithPgWeb(pgWeb => pgWeb
-        .WithHostPort(15432)
-        .WithLifetime(ContainerLifetime.Persistent))
-    .WithLifetime(ContainerLifetime.Persistent);
-```
-
-Bazy:
-```csharp
-var inventoryDb = postgres.AddDatabase("inventoryDb");
-var catalogDb = postgres.AddDatabase("catalogDb");
-var orderDb = postgres.AddDatabase("orderDb");
-```
-
-RabbitMq:
-```xml
-<PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.2.1" />
-```
-
-```csharp
-var rabbitmq = builder.AddRabbitMQ("rabbitmq")
-    .WithContainerName("rabbitmq.aspire")
-    .WithLifetime(ContainerLifetime.Persistent);
-```
-
-Serwisy:
-```csharp
-var catalog = builder.AddProject<Projects.Catalog>("catalog")
-    .WithReference(catalogDb)
-    .WaitFor(catalogDb);
-
-var inventory = builder.AddProject<Projects.Inventory>("inventory")
-    .WithReference(inventoryDb)
-    .WaitFor(inventoryDb);
-
-var order = builder.AddProject<Projects.Order>("order")
+// apphost
+var management = builder.AddProject<Projects.ShopManagement>("management")
     .WithReference(inventory)
-    .WithReference(orderDb)
-    .WithReference(rabbitmq)
-    .WaitFor(inventory)
-    .WaitFor(orderDb)
-    .WaitFor(rabbitmq);
-```
+    .WaitFor(inventory);
 
-ApiGateway:
-```csharp
-var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway")
-    .WithReference(catalog)
-    .WithReference(order)
-    .WithExternalHttpEndpoints()
-    .WaitFor(catalog)
-    .WaitFor(order);
-
+// shop management
+builder.Services.AddHttpClient("inventoryClient",
+    static client => client.BaseAddress = new("https+http://inventory"));
 ```
 
 </details>
