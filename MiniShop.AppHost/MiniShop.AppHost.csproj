@@ -13,32 +13,15 @@
 
     <ItemGroup>
         <PackageReference Include="Aspire.Hosting.AppHost" Version="9.2.1" />
-        <PackageReference Include="Aspire.Hosting.Azure.PostgreSQL" Version="9.2.1" />
-        <PackageReference Include="Aspire.Hosting.Docker" Version="9.2.1-preview.1.25222.1" />
-        <PackageReference Include="Aspire.Hosting.Kubernetes" Version="9.2.1-preview.1.25222.1" />
-        <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.2.1" />
         <PackageReference Include="Aspire.Hosting.PostgreSQL" Version="9.2.1" />
         <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="9.2.1" />
-        <PackageReference Include="Aspire.Hosting.Redis" Version="9.2.1" />
-        <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.4.0" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\ApiGateway\ApiGateway.csproj" />
         <ProjectReference Include="..\Catalog\Catalog.csproj" />
         <ProjectReference Include="..\Inventory\Inventory.csproj" />
-        <ProjectReference Include="..\Notification\Notification.csproj" />
         <ProjectReference Include="..\Order\Order.csproj" />
     </ItemGroup>
-
-<!--    <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">-->
-<!--        <ItemGroup>-->
-<!--            <PackageJsons Include="..\*\package.json"/>-->
-<!--        </ItemGroup>-->
-
-<!--        &lt;!&ndash; Install npm packages if node_modules is missing &ndash;&gt;-->
-<!--        <Message Importance="Normal" Text="Installing npm packages for %(PackageJsons.RelativeDir)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')"/>-->
-<!--        <Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)/node_modules')"/>-->
-<!--    </Target>-->
-
+    
 </Project>

@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalog", "Catalog\Catalog.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Order.IntegrationEvents", "Order.IntegrationEvents\Order.IntegrationEvents.csproj", "{E3F975A2-5437-4BB6-8C6E-31408CCA630A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notification", "Notification\Notification.csproj", "{E3AB7F00-E007-4FDF-A75D-3018177BD3F6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniShop.AppHost", "MiniShop.AppHost\MiniShop.AppHost.csproj", "{F341DB95-B86A-4562-9B03-06D23E79C25D}"
@@ -52,10 +50,6 @@ Global
 		{E3F975A2-5437-4BB6-8C6E-31408CCA630A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3F975A2-5437-4BB6-8C6E-31408CCA630A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3F975A2-5437-4BB6-8C6E-31408CCA630A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3AB7F00-E007-4FDF-A75D-3018177BD3F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3AB7F00-E007-4FDF-A75D-3018177BD3F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3AB7F00-E007-4FDF-A75D-3018177BD3F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3AB7F00-E007-4FDF-A75D-3018177BD3F6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2FF41EA-A6FD-414F-8C3F-68AA58432A52}.Release|Any CPU.ActiveCfg = Release|Any CPU

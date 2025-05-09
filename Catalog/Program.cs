@@ -15,7 +15,6 @@ var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 
-
 builder.Services.AddOpenTelemetry()
     .WithMetrics(m => m.AddMeter("Catalog.Metrics"));
 
@@ -29,8 +28,6 @@ builder.Services.AddSingleton<ProductMetrics>();
 builder.Services.AddEndpoints(assembly);
 builder.Services.AddProblemDetails();
 builder.Services.AddCors();
-
-builder.AddRedisOutputCache("redis");
 
 var app = builder.Build();
 
@@ -47,8 +44,6 @@ app.UseCors(c => c
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
-
-app.UseOutputCache();
 
 app.Run();
 
